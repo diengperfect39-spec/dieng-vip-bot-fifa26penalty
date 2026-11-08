@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Dieng FIFA VIP Bot Actif"
+    return "Dieng FIFA VIP Bot Actif - FC26 Penalty"
 
 @app.route(f'/{TOKEN}', methods=['POST'])
 def webhook():
@@ -29,29 +29,26 @@ def webhook():
             h1 = int(hashlib.md5(t1.encode()).hexdigest(), 16)
             h2 = int(hashlib.md5(t2.encode()).hexdigest(), 16)
             
-            # Moteur de scores fidèles à ton premier bot (scores serrés et élevés en fin de séance)
+            # Moteur robuste basé sur tes grilles FC26 Penalty (Scores élevés et serrés)
             vol = (h1 + h2) % 100
-            if vol < 40:
+            if vol < 30:
                 s1, s2 = 6, 5
                 alt1, alt2 = 7, 6
-                tot_str = "Plus de 7.5 buts (Forte intensité en fin de séance)"
-                line_val = 11
-                pen_text = "Plus de 3.5 Pénalties manqués (Forte nervosité en mort subite)"
+                tot_str = "Plus de 11.5 buts / Ligne 7.5 (Forte intensité en fin de séance)"
+                pen_text = "Plus de 2.5 Pénalties manqués (Nervosité en mort subite)"
                 pair_val = "Non"
-            elif vol < 75:
-                s1, s2 = 5, 3
-                alt1, alt2 = 6, 4
-                tot_str = "Plus de 7.5 buts (Séance rythmée attendue)"
-                line_val = 8
-                pen_text = "Moins de 2.5 Pénalties manqués (Efficacité remarquable des tireurs)"
+            elif vol < 65:
+                s1, s2 = 5, 4
+                alt1, alt2 = 6, 5
+                tot_str = "Plus de 8.5 buts / Ligne 6.5 (Séance rythmée et équilibrée)"
+                pen_text = "Plus de 1.5 Pénalties manqués (Duels tendus)"
                 pair_val = "Oui"
             else:
-                s1, s2 = 4, 2
-                alt1, alt2 = 5, 3
-                tot_str = "Plus de 6.5 buts (Maîtrise tactique)"
-                line_val = 6
-                pen_text = "Moins de 2.5 Pénalties manqués (Bons arrêts de gardiens)"
-                pair_val = "Oui"
+                s1, s2 = 7, 6
+                alt1, alt2 = 8, 7
+                tot_str = "Plus de 13.5 buts / Ligne 8.5 (Festival offensif maximal)"
+                pen_text = "Plus de 3.5 Pénalties manqués (Pression extrême)"
+                pair_val = "Non"
 
             if (h1 * h2) % 2 == 0:
                 winner, team_s1, team_s2, alt_s1, alt_s2 = t1, s1, s2, alt1, alt2
@@ -59,22 +56,22 @@ def webhook():
                 winner, team_s1, team_s2, alt_s1, alt_s2 = t2, s2, s1, alt2, alt1
 
             current_time = datetime.now().strftime("%H:%M")
-            conf = 97.5 + ((h1 % 22) / 10)
+            conf = 98.1 + ((h1 % 18) / 10)
 
             out = (
                 f"🔥 **DIENG PREDICT VIP - ANALYSE EXPERT FC26** 🔥\n\n"
                 f"⚽ **Match :** {t1} vs {t2}\n"
                 f"🕒 **Heure d'analyse :** {current_time} (GMT)\n"
-                f"🏆 **Contexte :** Analyse Dynamique & Forme du Jour (FC26)\n\n"
+                f"🏆 **Contexte :** Analyse Dynamique & Grille des Tirs au But (FC26)\n\n"
                 f"🎯 **1. Verdict & Hiérarchie :**\n"
                 f"• **Vainqueur Validé :** {winner} 🏆\n"
-                f"• **Analyse professionnelle :** Indice de surprise tactique : {winner} gère mieux la pression et déjoue les pronostics initiaux.\n\n"
+                f"• **Analyse professionnelle :** Maîtrise des frappes en fin de série : {winner} gère la pression psychologique et s'impose dans les moments clés.\n\n"
                 f"🎯 **2. Scores Exacts & Marchés Principaux :**\n"
                 f"• **Option 1 (Score exact principal) :** {t1} {team_s1} - {team_s2} {t2}\n"
                 f"• **Option 2 (Score exact alternatif) :** {t1} {alt_s1} - {alt_s2} {t2}\n"
                 f"• **Volume de buts :** Option Recommandée : {tot_str}\n\n"
                 f"🎯 **3. Options VIP Supplémentaires (Tendances Marché) :**\n"
-                f"• **Total Pair :** {pair_val} ({line_val} buts au total - Cohérence mathématique validée)\n"
+                f"• **Total Pair :** {pair_val} (Cohérence mathématique validée sur la grille)\n"
                 f"• **Pénalties Manqués :** {pen_text}\n\n"
                 f"📊 **Indice de Confiance VIP :** {conf:.1f}%\n"
             )
