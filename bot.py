@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Dieng VIP Bot Actif"
+    return "Dieng VIP Bot - FC26 Penalty v2 Actif"
 
 @app.route(f'/{TOKEN}', methods=['POST'])
 def webhook():
@@ -29,25 +29,25 @@ def webhook():
             h1 = int(hashlib.md5(t1.encode()).hexdigest(), 16)
             h2 = int(hashlib.md5(t2.encode()).hexdigest(), 16)
             
-            # Moteur strict basé uniquement sur les vraies grilles FC26 Penalty (Scores élevés)
-            vol = (h1 + h2) % 100
-            if vol < 35:
+            # Moteur exclusif FC26 Penalty : Scores élevés stricts
+            selector = (h1 + h2) % 3
+            if selector == 0:
                 s1, s2 = 6, 5
                 alt1, alt2 = 7, 6
-                tot_str = "Plus de 6.5 buts (Ligne 6.5 validée - Forte intensité)"
-                pen_text = "Plus de 2.5 Pénalties manqués (Nervosité en mort subite)"
+                tot_str = "Plus de 6.5 buts (Ligne 6.5 - Haute intensité)"
+                pen_text = "Plus de 2.5 Pénalties manqués (Nervosité extrême)"
                 pair_val = "Non"
-            elif vol < 70:
-                s1, s2 = 5, 4
-                alt1, alt2 = 6, 5
-                tot_str = "Plus de 7.5 buts (Ligne 7.5 validée - Séance rythmée)"
-                pen_text = "Moins de 2.5 Pénalties manqués (Efficacité des tireurs)"
-                pair_val = "Oui"
-            else:
+            elif selector == 1:
                 s1, s2 = 7, 6
                 alt1, alt2 = 8, 7
-                tot_str = "Plus de 8.5 buts (Ligne 8.5 validée - Festival offensif)"
-                pen_text = "Plus de 3.5 Pénalties manqués (Pression maximale)"
+                tot_str = "Plus de 7.5 buts (Ligne 7.5 - Séance prolifique)"
+                pen_text = "Plus de 1.5 Pénalties manqués (Duels tendus)"
+                pair_val = "Oui"
+            else:
+                s1, s2 = 5, 4
+                alt1, alt2 = 6, 5
+                tot_str = "Plus de 8.5 buts (Ligne 8.5 - Festival de tirs)"
+                pen_text = "Moins de 2.5 Pénalties manqués (Efficacité redoutable)"
                 pair_val = "Non"
 
             if (h1 * h2) % 2 == 0:
@@ -56,7 +56,7 @@ def webhook():
                 winner, team_s1, team_s2, alt_s1, alt_s2 = t2, s2, s1, alt2, alt1
 
             current_time = datetime.now().strftime("%H:%M")
-            conf = 98.3 + ((h1 % 15) / 10)
+            conf = 98.5 + ((h1 % 14) / 10)
 
             out = (
                 f"🔥 **DIENG PREDICT VIP - ANALYSE EXPERT FC26** 🔥\n\n"
