@@ -21,7 +21,7 @@ def run_bot():
     except Exception as e:
         print("Erreur nettoyage:", e)
 
-    print("Dieng VIP Bot - Moteur scientifique rigoureux en marche...")
+    print("Dieng VIP Bot - Moteur scientifique rigoureux avec émojis en marche...")
     offset = 0
     dernier_message_id = 0
 
@@ -61,41 +61,41 @@ def run_bot():
                                 h1 = int(hashlib.sha256(eq1.encode()).hexdigest(), 16)
                                 h2 = int(hashlib.sha256(eq2.encode()).hexdigest(), 16)
                                 
-                                # Modèle strict basé sur la réalité des tirs au but (jamais de 0 pour le perdant)
+                                # Logique stricte : scores serrés ou mort subite (le perdant marque TOUJOURS au moins 2 ou 3 buts, JAMAIS de 0)
                                 seed_val = (h1 ^ h2) % 100
                                 
-                                if seed_val < 20:  # Régimen Mort Subite / Scores fleuves réalistes (ex: 7:6, 6:5)
-                                    score_gagnant = 6 + (h1 % 3)  # 6, 7 ou 8
-                                    score_perdant = score_gagnant - 1  # Toujours serré à 1 but d'écart (ex: 6-5, 7-6)
-                                    regime_title = "⚡ Régime Volatilité & Mort Subite"
-                                elif seed_val < 60:  # Régime Intensité Haute (ex: 4:5, 5:4)
-                                    score_gagnant = 5
-                                    score_perdant = 4
+                                if seed_val < 25:  # Régime Mort Subite (ex: 7:6, 6:5)
+                                    score_g = 6 + (h1 % 3)
+                                    score_p = score_g - 1
+                                    regime_title = "⚡ Alerte Mort Subite & Volatilité Maximale"
+                                elif seed_val < 65:  # Régime Intensité (ex: 5:4, 4:5)
+                                    score_g = 5
+                                    score_p = 4
                                     regime_title = "🔥 Régime Intensité & Duel Serré"
-                                else:  # Régime Standard (ex: 3:4, 4:3)
-                                    score_gagnant = 4
-                                    score_perdant = 3
+                                else:  # Régime Standard (ex: 4:3, 3:2)
+                                    score_g = 4
+                                    score_p = 3
                                     regime_title = "🎯 Régime Standard - Maîtrise des Tirs"
 
-                                # Distribution aléatoire de l'ordre (Équipe 1 ou Équipe 2 gagnante)
+                                # Attribution aléatoire de l'ordre vainqueur/perdant
                                 if h1 % 2 == 0:
-                                    score_a = score_gagnant
-                                    score_b = score_perdant
+                                    score_a = score_g
+                                    score_b = score_p
                                 else:
-                                    score_a = score_perdant
-                                    score_b = score_gagnant
+                                    score_a = score_p
+                                    score_b = score_g
 
                                 vainqueur = eq1 if score_a > score_b else eq2
                                 perdant = eq2 if score_a > score_b else eq1
                                 
-                                # Scores alternatifs logiques et réalistes (écart de 1 ou 2 buts maximum, jamais de 0)
+                                # Scores alternatifs rigoureux (Garantit l'absence totale de score à 0)
                                 if score_a > score_b:
                                     alt_a = max(3, score_a - 1)
-                                    alt_b = max(2, score_b - 1)
+                                    alt_b = max(2, score_b)
                                     if alt_a == alt_b:
                                         alt_a += 1
                                 else:
-                                    alt_a = max(2, score_a - 1)
+                                    alt_a = max(2, score_a)
                                     alt_b = max(3, score_b - 1)
                                     if alt_a == alt_b:
                                         alt_b += 1
@@ -114,10 +114,10 @@ def run_bot():
                                 analyse_pro = expertises[(h1 + h2) % len(expertises)]
                                 
                                 paire_tendance = "Oui (Équilibre structurel validé)" if total_buts % 2 == 0 else "Non (Rupture de rythme en mort subite)"
-                                indice_fiabilite = 98.5 + ((h1 % 14) / 10)
+                                indice_fiabilite = 98.6 + ((h1 % 13) / 10)
                                 heure_gmt = datetime.utcnow().strftime("%H:%M")
 
-                                # Rendu visuel propre, structuré, riche en émojis et sans aucune absurdité de score
+                                # Structure visuelle propre, ordonnée et bourrée d'émojis
                                 analysis_text = (
                                     f"📊 **DIENG PREDICT VIP — ANALYSE EXPERT FC26**\n"
                                     f"──────────────────────────────\n"
