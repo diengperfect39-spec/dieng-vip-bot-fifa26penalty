@@ -13,7 +13,7 @@ try:
 except Exception as e:
     print("Erreur nettoyage:", e)
 
-print("Dieng VIP Bot - Moteur d'analyse experte et comportementale activé...")
+print("Dieng VIP Bot - Mode Background Worker actif...")
 offset = 0
 
 while True:
@@ -32,7 +32,7 @@ while True:
                         if text_recu == "/start":
                             welcome_msg = (
                                 "👑 Bienvenue sur Dieng VIP Bot - FIFA 26 / FC Penalty 👑\n\n"
-                                "Système d'analyse tactique et de lecture des confrontations activé.\n"
+                                "Moteur d'expertise analytique et comportementale activé.\n"
                                 "Envoie-moi une affiche (ex: Real Madrid vs Milan) pour obtenir une expertise professionnelle détaillée !"
                             )
                             requests.post(f"{URL}/sendMessage", json={"chat_id": chat_id, "text": welcome_msg}, timeout=10)
@@ -41,16 +41,14 @@ while True:
                             eq1 = parties[0]
                             eq2 = parties[1] if len(parties) > 1 else "Visiteur"
                             
-                            # Analyse algorithmique croisée des deux équipes pour un profilage unique
                             h1 = int(hashlib.sha256(eq1.encode()).hexdigest(), 16)
                             h2 = int(hashlib.sha256(eq2.encode()).hexdigest(), 16)
                             
-                            # Évaluation rigoureuse des forces en présence
-                            score_eq1 = 4 + (h1 % 3)  # Entre 4 et 6 buts
-                            score_eq2 = 3 + (h2 % 3)  # Entre 3 et 5 buts
+                            score_eq1 = 4 + (h1 % 3)
+                            score_eq2 = 3 + (h2 % 3)
                             
                             if score_eq1 == score_eq2:
-                                score_eq1 += 1  # Tranche de manière experte pour éviter la neutralité
+                                score_eq1 += 1
                                 
                             vainqueur = eq1 if score_eq1 > score_eq2 else eq2
                             perdant = eq2 if score_eq1 > score_eq2 else eq1
@@ -61,7 +59,6 @@ while True:
                             total_buts = score_eq1 + score_eq2
                             seuil_marche = total_buts - 0.5
                             
-                            # Banques d'analyses professionnelles contextuelles basées sur le profil des équipes
                             expertises = [
                                 f"Supériorité tactique confirmée de {vainqueur} dans l'anticipation des trajectoires et la gestion de la pression psychologique en fin de séance face à {perdant}.",
                                 f"Efficacité redoutable de {vainqueur} sur les tirs de précision sous haute tension, mettant à mal la structure défensive de {perdant}.",
@@ -71,8 +68,6 @@ while True:
                             
                             paire_tendance = "Oui (Équilibre structurel des frappes validé)" if total_buts % 2 == 0 else "Non (Rupture de rythme en mort subite)"
                             pen_manques = 2 + ((h1 * h2) % 3)
-                            
-                            # Indice de fiabilité affiné reflétant la complexité de l'affiche
                             indice_fiabilite = 97.9 + ((h1 % 18) / 10)
                             heure_gmt = datetime.utcnow().strftime("%H:%M")
 
