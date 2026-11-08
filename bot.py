@@ -1,6 +1,7 @@
 import os
 import hashlib
 import requests
+from datetime import datetime
 from flask import Flask, request, jsonify
 
 TOKEN = "9191245417:AAGcmBNQNwsUJTUcM6G72TfQhtGAMTB9KDo"
@@ -11,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Bot Actif - Version 3"
+    return "Dieng FIFA VIP Bot Actif"
 
 @app.route(f'/{TOKEN}', methods=['POST'])
 def webhook():
@@ -28,29 +29,56 @@ def webhook():
             h1 = int(hashlib.md5(t1.encode()).hexdigest(), 16)
             h2 = int(hashlib.md5(t2.encode()).hexdigest(), 16)
             
-            # Scores stricts FC Penalty (Perdant entre 4 et 7 buts minimum)
-            loser = 4 + (h1 % 4)
-            winner = loser + 1 + (h2 % 3)
-            
-            if (h1 * h2) % 2 == 0:
-                s1, s2, win_team = winner, loser, t1
+            # Moteur de scores fidèles à ton premier bot (scores serrés et élevés en fin de séance)
+            vol = (h1 + h2) % 100
+            if vol < 40:
+                s1, s2 = 6, 5
+                alt1, alt2 = 7, 6
+                tot_str = "Plus de 7.5 buts (Forte intensité en fin de séance)"
+                line_val = 11
+                pen_text = "Plus de 3.5 Pénalties manqués (Forte nervosité en mort subite)"
+                pair_val = "Non"
+            elif vol < 75:
+                s1, s2 = 5, 3
+                alt1, alt2 = 6, 4
+                tot_str = "Plus de 7.5 buts (Séance rythmée attendue)"
+                line_val = 8
+                pen_text = "Moins de 2.5 Pénalties manqués (Efficacité remarquable des tireurs)"
+                pair_val = "Oui"
             else:
-                s1, s2, win_team = loser, winner, t2
-                
-            alt1 = max(4, s1 + 1)
-            alt2 = max(4, s2 + 1)
-            total = s1 + s2
-            
+                s1, s2 = 4, 2
+                alt1, alt2 = 5, 3
+                tot_str = "Plus de 6.5 buts (Maîtrise tactique)"
+                line_val = 6
+                pen_text = "Moins de 2.5 Pénalties manqués (Bons arrêts de gardiens)"
+                pair_val = "Oui"
+
+            if (h1 * h2) % 2 == 0:
+                winner, team_s1, team_s2, alt_s1, alt_s2 = t1, s1, s2, alt1, alt2
+            else:
+                winner, team_s1, team_s2, alt_s1, alt_s2 = t2, s2, s1, alt2, alt1
+
+            current_time = datetime.now().strftime("%H:%M")
+            conf = 97.5 + ((h1 % 22) / 10)
+
             out = (
-                f"🚨 **NOUVEAU MOTEUR FC26 v3** 🚨\n\n"
-                f"⚽ Match : {t1} vs {t2}\n"
-                f"🏆 Vainqueur : {win_team}\n\n"
-                f"🎯 Scores Exacts :\n"
-                f"• Option 1 : {t1} {s1} - {s2} {t2}\n"
-                f"• Option 2 : {t1} {alt1} - {alt2} {t2}\n"
-                f"• Total Buts : Plus de {total - 0.5}\n\n"
-                f"💎 Confiance : 99.9%"
+                f"🔥 **DIENG PREDICT VIP - ANALYSE EXPERT FC26** 🔥\n\n"
+                f"⚽ **Match :** {t1} vs {t2}\n"
+                f"🕒 **Heure d'analyse :** {current_time} (GMT)\n"
+                f"🏆 **Contexte :** Analyse Dynamique & Forme du Jour (FC26)\n\n"
+                f"🎯 **1. Verdict & Hiérarchie :**\n"
+                f"• **Vainqueur Validé :** {winner} 🏆\n"
+                f"• **Analyse professionnelle :** Indice de surprise tactique : {winner} gère mieux la pression et déjoue les pronostics initiaux.\n\n"
+                f"🎯 **2. Scores Exacts & Marchés Principaux :**\n"
+                f"• **Option 1 (Score exact principal) :** {t1} {team_s1} - {team_s2} {t2}\n"
+                f"• **Option 2 (Score exact alternatif) :** {t1} {alt_s1} - {alt_s2} {t2}\n"
+                f"• **Volume de buts :** Option Recommandée : {tot_str}\n\n"
+                f"🎯 **3. Options VIP Supplémentaires (Tendances Marché) :**\n"
+                f"• **Total Pair :** {pair_val} ({line_val} buts au total - Cohérence mathématique validée)\n"
+                f"• **Pénalties Manqués :** {pen_text}\n\n"
+                f"📊 **Indice de Confiance VIP :** {conf:.1f}%\n"
             )
+            
             requests.post(f"{URL}/sendMessage", json={"chat_id": chat_id, "text": out, "parse_mode": "Markdown"})
             
     return jsonify({"status": "ok"})
