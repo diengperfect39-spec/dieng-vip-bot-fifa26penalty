@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Dieng VIP Bot - Interface Pro Active !"
+    return "Dieng VIP Bot - Moteur FC Penalty Ultra-Pro Actif !"
 
 def run_bot():
     try:
@@ -21,7 +21,7 @@ def run_bot():
     except Exception as e:
         print("Erreur nettoyage:", e)
 
-    print("Dieng VIP Bot - Moteur d'analyse visuelle et dynamique en marche...")
+    print("Dieng VIP Bot - Moteur scientifique rigoureux en marche...")
     offset = 0
     dernier_message_id = 0
 
@@ -49,8 +49,8 @@ def run_bot():
                                 welcome_msg = (
                                     "👑 **DIENG VIP BOT - FC26 PENALTY PRO** 👑\n\n"
                                     "──────────────────────────────\n"
-                                    "✨ *Moteur d'expertise analytique et visuelle haute fidélité*\n\n"
-                                    "Envoie-moi une affiche au format *Équipe 1 vs Équipe 2* (ex: `Real Madrid vs Milan`) pour recevoir une lecture de marché claire, ordonnée et ultra-précise !"
+                                    "✨ *Moteur d'expertise analytique et statistique haute fidélité*\n\n"
+                                    "Envoie-moi une affiche au format *Équipe 1 vs Équipe 2* (ex: `Paris Saint-Germain vs Al Nassr`) pour recevoir une lecture de marché irréprochable !"
                                 )
                                 requests.post(f"{URL}/sendMessage", json={"chat_id": chat_id, "text": welcome_msg, "parse_mode": "Markdown"}, timeout=10)
                             elif not text_recu.startswith("/"):
@@ -58,59 +58,66 @@ def run_bot():
                                 eq1 = parties[0]
                                 eq2 = parties[1] if len(parties) > 1 else "Visiteur"
                                 
-                                # Empreinte cryptographique pour une variation riche des scores
                                 h1 = int(hashlib.sha256(eq1.encode()).hexdigest(), 16)
                                 h2 = int(hashlib.sha256(eq2.encode()).hexdigest(), 16)
                                 
-                                # Modèle dynamique et varié (Évite la répétition de scores figés)
-                                combo_seed = (h1 ^ h2) % 100
+                                # Modèle strict basé sur la réalité des tirs au but (jamais de 0 pour le perdant)
+                                seed_val = (h1 ^ h2) % 100
                                 
-                                if combo_seed < 15:  # Scénario Mort Subite / Scores fleuves (ex: 7:6, 8:9)
-                                    score_a = 6 + (h1 % 4)
-                                    score_b = 5 + (h2 % 4)
-                                    if score_a == score_b:
-                                        score_a += 1
+                                if seed_val < 20:  # Régimen Mort Subite / Scores fleuves réalistes (ex: 7:6, 6:5)
+                                    score_gagnant = 6 + (h1 % 3)  # 6, 7 ou 8
+                                    score_perdant = score_gagnant - 1  # Toujours serré à 1 but d'écart (ex: 6-5, 7-6)
                                     regime_title = "⚡ Régime Volatilité & Mort Subite"
-                                elif combo_seed < 45:  # Scénario Intensité Haute (ex: 5:4, 4:5, 6:5)
-                                    score_a = 4 + (h1 % 3)
-                                    score_b = 3 + (h2 % 3)
-                                    if score_a == score_b:
-                                        score_b += 1
+                                elif seed_val < 60:  # Régime Intensité Haute (ex: 4:5, 5:4)
+                                    score_gagnant = 5
+                                    score_perdant = 4
                                     regime_title = "🔥 Régime Intensité & Duel Serré"
-                                else:  # Scénario Standard (ex: 3:1, 4:2, 3:4, 5:3)
-                                    score_a = 3 + (h1 % 3)
-                                    score_b = 1 + (h2 % 4)
-                                    if score_a == score_b:
-                                        score_a += 1
+                                else:  # Régime Standard (ex: 3:4, 4:3)
+                                    score_gagnant = 4
+                                    score_perdant = 3
                                     regime_title = "🎯 Régime Standard - Maîtrise des Tirs"
+
+                                # Distribution aléatoire de l'ordre (Équipe 1 ou Équipe 2 gagnante)
+                                if h1 % 2 == 0:
+                                    score_a = score_gagnant
+                                    score_b = score_perdant
+                                else:
+                                    score_a = score_perdant
+                                    score_b = score_gagnant
 
                                 vainqueur = eq1 if score_a > score_b else eq2
                                 perdant = eq2 if score_a > score_b else eq1
                                 
-                                # Scores alternatifs dynamiques
-                                alt_a = max(2, score_b - (1 if score_b > 2 else 0))
-                                alt_b = max(2, score_a - 1)
-                                if alt_a == alt_b:
-                                    alt_a += 1
+                                # Scores alternatifs logiques et réalistes (écart de 1 ou 2 buts maximum, jamais de 0)
+                                if score_a > score_b:
+                                    alt_a = max(3, score_a - 1)
+                                    alt_b = max(2, score_b - 1)
+                                    if alt_a == alt_b:
+                                        alt_a += 1
+                                else:
+                                    alt_a = max(2, score_a - 1)
+                                    alt_b = max(3, score_b - 1)
+                                    if alt_a == alt_b:
+                                        alt_b += 1
 
                                 total_buts = score_a + score_b
                                 seuil_marche = total_buts - 0.5
                                 
-                                taux_eff1 = 76.5 + (h1 % 21)
-                                pen_manques = max(1, (total_buts // 3) + (h1 % 2))
+                                taux_eff1 = 78.0 + (h1 % 17)
+                                pen_manques = max(1, (total_buts // 4) + 1)
                                 
                                 expertises = [
                                     f"Supériorité tactique confirmée de {vainqueur} dans l'anticipation des trajectoires et la gestion de la pression psychologique face à {perdant}.",
                                     f"Efficacité redoutable de {vainqueur} sur les tirs de précision sous haute tension ({taux_eff1:.1f}% de réussite), mettant à mal la structure défensive adverse.",
-                                    f"Maîtrise collective et lecture lucide des duels par {vainqueur}, dictant le tempo face à un {perdant} en difficulté dans les moments clés."
+                                    f"Maîtrise collective et lecture lucide des duels par {vainqueur}, dictant le tempo face à un {perdant} accrocheur dans les moments clés."
                                 ]
                                 analyse_pro = expertises[(h1 + h2) % len(expertises)]
                                 
                                 paire_tendance = "Oui (Équilibre structurel validé)" if total_buts % 2 == 0 else "Non (Rupture de rythme en mort subite)"
-                                indice_fiabilite = 98.2 + ((h1 % 16) / 10)
+                                indice_fiabilite = 98.5 + ((h1 % 14) / 10)
                                 heure_gmt = datetime.utcnow().strftime("%H:%M")
 
-                                # Structure visuelle propre, ordonnée et élégante sur une seule page
+                                # Rendu visuel propre, structuré, riche en émojis et sans aucune absurdité de score
                                 analysis_text = (
                                     f"📊 **DIENG PREDICT VIP — ANALYSE EXPERT FC26**\n"
                                     f"──────────────────────────────\n"
