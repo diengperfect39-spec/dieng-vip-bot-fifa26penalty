@@ -109,9 +109,7 @@ def run_bot():
             print("Erreur réseau:", str(e))
 
 if __name__ == '__main__':
-    # Lancer le bot dans un thread séparé
     t = Thread(target=run_bot)
     t.start()
-    # Démarrer le serveur web Flask pour satisfaire Render sur le port 10000
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
